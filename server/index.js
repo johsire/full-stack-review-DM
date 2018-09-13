@@ -59,7 +59,7 @@ if (foundUser[0]) {
  // placing the createdUser obj on req.session.user obj:
  req.session.user = createdUser[0];
 };
- res.redirect('/');
+ res.redirect('http://localhost:3000');
 
  // console.log(userRes.data)
 
@@ -74,6 +74,11 @@ app.get('/api/user-data', (req, res) => {
  } else {
   res.status(401).send('Go log in')
  }
+});
+
+app.get('/logout', (req, res) => {
+ req.session.destroy();
+ res.redirect('http://localhost:3000');
 });
 
 

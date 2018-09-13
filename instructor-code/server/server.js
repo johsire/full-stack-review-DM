@@ -47,8 +47,21 @@ app.get('/auth/callback', async (req, res) => {
     // [ {name, email, picture, auth_id} ]
     req.session.user = createdUser[0]
   }
-  res.redirect('/');
+  res.redirect('/#/private');
 
+})
+
+app.get('/api/user-data', (req, res) => {
+  if (req.session.user) {
+    res.status(200).send(req.session.user);
+  } else {
+    res.status(401).send('Go log in')
+  }
+})
+
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/')
 })
 
 app.listen(SERVER_PORT, () => {
