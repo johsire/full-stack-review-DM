@@ -13,7 +13,8 @@ const {
  REACT_APP_DOMAIN,
  REACT_APP_CLIENT_ID,
  CLIENT_SECRET,
- CONNECTION_STRING
+ CONNECTION_STRING,
+ ENVIRONMENT
 } = process.env;
 
 // set-up massive:
@@ -25,6 +26,18 @@ app.use(session({
  resave: false,
  saveUninitialized: true
 }));
+
+// custom middleware: This checks if the user is logged in and if so sets the user obj on sessions thus they dont have to log in every time they make any changes in the Private file/ page:
+app.use((req, res, next) => {
+  if(ENVIRONMENT === 'dev') {
+   req.app.get('db').set_data().then(userData => {
+    req.session.user = userData[0];
+     next();
+   });
+  } else {
+   next();
+   }
+});
 
 // authentification & user info display:
 app.get('/auth/callback', async (req, res) => {

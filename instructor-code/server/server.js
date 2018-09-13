@@ -12,7 +12,8 @@ const {
   REACT_APP_DOMAIN,
   REACT_APP_CLIENT_ID,
   CLIENT_SECRET,
-  CONNECTION_STRING
+  CONNECTION_STRING,
+  ENVIRONMENT
 } = process.env;
 
 massive(CONNECTION_STRING).then(db => app.set('db', db));
@@ -22,6 +23,17 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+
+app.use((req, res, next) => {
+  if (ENVIRONMENT === 'dev') {
+    req.app.get('db').set_data().then(userData => {
+      req.session.user = userData[0]
+      next();
+    })
+  } else {
+    next();
+  }
+})
 
 app.get('/auth/callback', async (req, res) => {
   let payload = {
