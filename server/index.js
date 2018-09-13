@@ -41,7 +41,7 @@ app.get('/auth/callback', async (req, res) => {
  let toeknRes = await axios.post(`https://${REACT_APP_DOMAIN}/oauth/token`, payload)
 
  // use token to get uesr data:
- let userRes = await axios.get(`https://${REACT_APP_DOMAIN}/ userinfo?access_token=${toeknRes.data.access_token}`)
+ let userRes = await axios.get(`https://${REACT_APP_DOMAIN}/userinfo?access_token=${toeknRes.data.access_token}`)
 
 const db = req.app.get('db');
 const { email, name, picture, sub } = userRes.data;
@@ -49,13 +49,17 @@ const { email, name, picture, sub } = userRes.data;
 // check if user exists in db by checking the auth_id/sub:
 // always returns an array -data type: 
 // Thus foundUser will eithr be an array of 1 for found or 0 for not found:
-let foundUser = await db.find_user()[sub];
+let foundUser = await db.find_user([sub]);
 if (foundUser[0]) {
  req.session.user = foundUser[0];
 } else {
+ // if no user found - create user;
  let createdUser = await db.create_user([ name, email, picture, sub ]);
-};
 
+ // placing the createdUser obj on req.session.user obj:
+ req.session.user = createdUser[0];
+};
+ res.redirect('/');
 
  // console.log(userRes.data)
 
@@ -64,6 +68,13 @@ if (foundUser[0]) {
  // res.redirect('/');
 });
 
+app.get('/api/user-data', (req, res) => {
+ if (req.session.user) {
+  res.status(200).send(req.session.user)
+ } else {
+  res.status(401).send('Go log in')
+ }
+});
 
 
 app.listen(SERVER_PORT, () => {

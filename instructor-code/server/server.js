@@ -35,7 +35,6 @@ app.get('/auth/callback', async (req, res) => {
   let tokenRes = await axios.post(`https://${REACT_APP_DOMAIN}/oauth/token`, payload);
   // use token to get user data
   let userRes = await axios.get(`https://${REACT_APP_DOMAIN}/userinfo?access_token=${tokenRes.data.access_token}`)
-  console.log()
 
   const db = req.app.get('db');
   const { email, name, picture, sub } = userRes.data;
@@ -44,8 +43,11 @@ app.get('/auth/callback', async (req, res) => {
   if (foundUser[0]) {
     req.session.user = foundUser[0];
   } else {
-
+    let createdUser = await db.create_user([name, email, picture, sub]);
+    // [ {name, email, picture, auth_id} ]
+    req.session.user = createdUser[0]
   }
+  res.redirect('/');
 
 })
 
