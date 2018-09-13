@@ -53,8 +53,8 @@ let foundUser = await db.find_user()[sub];
 if (foundUser[0]) {
  req.session.user = foundUser[0];
 } else {
- 
-}
+ let createdUser = await db.create_user([ name, email, picture, sub ]);
+};
 
 
  // console.log(userRes.data)

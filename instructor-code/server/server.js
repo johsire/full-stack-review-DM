@@ -37,7 +37,15 @@ app.get('/auth/callback', async (req, res) => {
   let userRes = await axios.get(`https://${REACT_APP_DOMAIN}/userinfo?access_token=${tokenRes.data.access_token}`)
   console.log()
 
+  const db = req.app.get('db');
+  const { email, name, picture, sub } = userRes.data;
 
+  let foundUser = await db.find_user([sub])
+  if (foundUser[0]) {
+    req.session.user = foundUser[0];
+  } else {
+
+  }
 
 })
 
