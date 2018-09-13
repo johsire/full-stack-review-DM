@@ -42,6 +42,21 @@ app.get('/auth/callback', async (req, res) => {
 
  // use token to get uesr data:
  let userRes = await axios.get(`https://${REACT_APP_DOMAIN}/ userinfo?access_token=${toeknRes.data.access_token}`)
+
+const db = req.app.get('db');
+const { email, name, picture, sub } = userRes.data;
+
+// check if user exists in db by checking the auth_id/sub:
+// always returns an array -data type: 
+// Thus foundUser will eithr be an array of 1 for found or 0 for not found:
+let foundUser = await db.find_user()[sub];
+if (foundUser[0]) {
+ req.session.user = foundUser[0];
+} else {
+ 
+}
+
+
  // console.log(userRes.data)
 
  // put user data on session:
