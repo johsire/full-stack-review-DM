@@ -24,10 +24,10 @@
   "main": "./server/index.js",
   "proxy": {
     "/api": {
-      "target": "http://localhost:3005"
+      "target": "http://localhost:4005"
     },
     "/auth": {
-      "target": "http://localhost:3005"
+      "target": "http://localhost:4005"
     }
   }
 }
