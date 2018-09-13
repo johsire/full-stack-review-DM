@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const session = require('express-session');
 const axios = require('axios');
+const massive = require('massive');
 
 const app = express();
 
@@ -10,8 +11,11 @@ const {
   SESSION_SECRET,
   REACT_APP_DOMAIN,
   REACT_APP_CLIENT_ID,
-  CLIENT_SECRET
+  CLIENT_SECRET,
+  CONNECTION_STRING
 } = process.env;
+
+massive(CONNECTION_STRING).then(db => app.set('db', db));
 
 app.use(session({
   secret: SESSION_SECRET,
@@ -31,9 +35,10 @@ app.get('/auth/callback', async (req, res) => {
   let tokenRes = await axios.post(`https://${REACT_APP_DOMAIN}/oauth/token`, payload);
   // use token to get user data
   let userRes = await axios.get(`https://${REACT_APP_DOMAIN}/userinfo?access_token=${tokenRes.data.access_token}`)
-  // put user data on session
-  req.session.user = userRes.data;
-  res.redirect('/')
+  console.log()
+
+
+
 })
 
 app.listen(SERVER_PORT, () => {

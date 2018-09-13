@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const axios = require('axios');
+const massive = require('massive');
 
 const app = express();
 
@@ -11,15 +12,21 @@ const {
  SESSION_SECRET,
  REACT_APP_DOMAIN,
  REACT_APP_CLIENT_ID,
- CLIENT_SECRET
+ CLIENT_SECRET,
+ CONNECTION_STRING
 } = process.env;
 
+// set-up massive:
+massive(CONNECTION_STRING).then(db => app.set('db', db));
+
+// set-up session:
 app.use(session({
  secret: SESSION_SECRET,
  resave: false,
  saveUninitialized: true
 }));
 
+// authentification & user info display:
 app.get('/auth/callback', async (req, res) => {
  // code ====> req.query.code
  let payload = {
@@ -38,8 +45,8 @@ app.get('/auth/callback', async (req, res) => {
  // console.log(userRes.data)
 
  // put user data on session:
- req.session.user = userRes.data;
- res.redirect('/');
+ // req.session.user = userRes.data;
+ // res.redirect('/');
 });
 
 
