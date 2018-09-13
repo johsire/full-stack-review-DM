@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import { getUserData } from './../../ducks/users';
+import { connect } from 'react-redux';
 
-export default class Private extends Component {
+class Private extends Component {
 
- componentDidMount() {
-  
+ async componentDidMount() {
+   let res = axios.get('/api/user-data'); {
+     // use action creator to update store:
+     getUserData
+   }
  }
 
  render() {
@@ -15,3 +21,16 @@ export default class Private extends Component {
   )
  }
 };
+
+// the entire redux state store is passed in to this component thru connect n mapstatetoprops:
+function mapStateToProps(state) {
+  return {
+   user: state.user
+  }
+};
+
+// let mapStateToProps = ({ user }) => { user }
+// Object.assign(this.props, { user: state.user });
+// this.props = { user: state.user };
+
+export default connect(mapStateToProps, { getUserData })(Private);
