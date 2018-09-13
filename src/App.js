@@ -8,7 +8,7 @@ import Private from './components/Private/Private';
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div>
       <HashRouter>
         <Switch>
           <Route path='/' component={Login} exact />
