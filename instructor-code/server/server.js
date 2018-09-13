@@ -61,7 +61,7 @@ app.get('/api/user-data', (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
-  res.redirect('/')
+  res.redirect('http://localhost:3000/')
 })
 
 app.listen(SERVER_PORT, () => {

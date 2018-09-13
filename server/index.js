@@ -69,6 +69,7 @@ if (foundUser[0]) {
 });
 
 app.get('/api/user-data', (req, res) => {
+ console.log(req.session.user, 'userrrrr')
  if (req.session.user) {
   res.status(200).send(req.session.user)
  } else {

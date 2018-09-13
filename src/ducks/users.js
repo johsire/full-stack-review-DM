@@ -7,7 +7,7 @@ const initialState = {
 const GET_USER_DATA = 'GET_USER_DATA';
 
 // ACTION CREATORS:
-export function getUserData() {
+export function getUserData(data) {
  return {
   type: GET_USER_DATA,
   payload: data
@@ -16,6 +16,7 @@ export function getUserData() {
 
 // REDUCER:
 export default function reducer(state = initialState, action) {
+ console.log(action)
  switch(action.type) {
    case GET_USER_DATA:
      return Object.assign({}, state, {user: action.payload});

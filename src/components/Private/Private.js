@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 class Private extends Component {
 
  async componentDidMount() {
-   let res = axios.get('/api/user-data'); {
+   let res = await axios.get('/api/user-data'); {
      // use action creator to update store:
      this.props.getUserData(res.data);
    }
  }
 
  render() {
-  // console.log(this.props);
+  console.log(this.props);
   let { user_name, email, picture, auth_id } = this.props.user;
   return (
    <div>
@@ -22,7 +22,7 @@ class Private extends Component {
     {
       user_name ? (
        <div>
-        <P>Account Holder: {user_name}</P>
+        <p>Account Holder: {user_name}</p>
         <p>Email: {email}</p>
         <p>Account #: {auth_id}</p>
         <img src={picture} alt=""/>
